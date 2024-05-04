@@ -35,6 +35,10 @@
      filter: version
     ignore_errors: yes
     register: mysql_connection_output
+
+  - name: print the error in register  
+    ansible.builtin.debug:
+     msg: " output:{{ mysql_connection_output }}"
     
     
   - name: set db root password
