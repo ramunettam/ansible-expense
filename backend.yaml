@@ -1,7 +1,6 @@
-
 - name: configure backend server
   become: yes
-  hosts: backend.nettam.online
+  hosts: backend
   vars:
     login_host: backend.nettam.online
     login_password: ExpenseApp@1
