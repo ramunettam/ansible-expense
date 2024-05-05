@@ -3,7 +3,7 @@
   become: yes
   hosts: backend
   vars:
-    login_host: db.nettam.online
+    login_host: backend.nettam.online
     login_password: ExpenseApp@1
   tasks:
   - name: disable default nodejs
