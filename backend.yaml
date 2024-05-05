@@ -5,20 +5,20 @@
     login_host: db.nettam.online
     login_password: ExpenseApp@1
 
-  tasks:
-   - name: disable default nodejs
-     ansible.builtin.command: dnf module disable nodejs -y
+   tasks:
+  - name: disable default nodejs
+    ansible.builtin.command: dnf module disable nodejs -y
 
-   - name: enable nodejs 20
-     ansible.builtin.command: dnf module enable nodejs:20 -y
+  - name: enable nodejs:20
+    ansible.builtin.command: dnf module enable nodejs:20 -y
 
-   - name: install and enable nodejs
-     ansible.builtin.package:
-      name: "{{ item.name }}"
-      state: latest
-      loop:
-      - nodejs
-      - mysql
+  - name: install nodejs
+    ansible.builtin.dnf: # only works for Redhat family
+      name: "{{ item }}"
+      state: installed
+    loop:
+    - nodejs
+    - mysql
 
    - name: create expense user
      ansible.builtin.user:   
