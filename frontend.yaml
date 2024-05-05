@@ -14,25 +14,25 @@
      state: started
      enabled: yes
 
-#   - name: remove the default html file
-#     ansible.builtin.file:
-#      path: /usr/share/nginx/html
-#      state: absent
+  - name: remove the default html file
+    ansible.builtin.file:
+     path: /usr/share/nginx/html
+     state: absent
 
-#  - name: create html directory
-#    ansible.builtin.file:
-#     path: /usr/share/nginx/html
-#     state: directory
+ - name: create html directory
+   ansible.builtin.file:
+    path: /usr/share/nginx/html
+    state: directory
 
-#  - name: dowanload and unarkive the front endcode
-#    ansible.builtin.unarchive:
-#     src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-#     dest: /usr/share/nginx/html
+ - name: dowanload and unarkive the front endcode
+   ansible.builtin.unarchive:
+    src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+    dest: /usr/share/nginx/html
 
-#  - name: restart nginix
-#    ansible.builtin.service:
-#     name: nginix
-#     starte: restarted
+ - name: restart nginix
+   ansible.builtin.service:
+    name: nginix
+    starte: restarted
 
 
 
