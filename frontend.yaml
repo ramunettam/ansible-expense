@@ -1,7 +1,6 @@
 - name: frontend configaration
-  hosts: frondend
+  hosts: frontend
   become: yes
-  vars:
   tasks:
 
   - name: install nginix
@@ -17,8 +16,8 @@
 
   - name: remove the default html file
     ansible.builtin.file:
-    path: /usr/share/nginx/html
-    state: absent
+     path: /usr/share/nginx/html
+     state: absent
 
  - name: create html directory
    ansible.builtin.file:
@@ -34,7 +33,7 @@
    ansible.builtin.service:
     name: nginix
     starte: restarted
-       
+
 
 
       
