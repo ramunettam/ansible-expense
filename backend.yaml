@@ -5,7 +5,7 @@
     login_host: db.nettam.online
     login_password: ExpenseApp@1
 
-   tasks:
+  tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable nodejs -y
 
