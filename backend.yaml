@@ -1,81 +1,58 @@
-- name: configure backend server
-  become: yes
-  hosts: backend
-  vars:
-    login_host: db.nettam.online
-    login_password: ExpenseApp@1
-
-  tasks:
-  - name: disable default nodejs
-    ansible.builtin.command: dnf module disable nodejs -y
-
-  - name: enable nodejs:20
-    ansible.builtin.command: dnf module enable nodejs:20 -y
-
-  - name: install nodejs
-    ansible.builtin.dnf: # only works for Redhat family
-      name: "{{ item }}"
-      state: installed
-    loop:
-    - nodejs
+- nodejs
     - mysql
 
-   - name: create expense user
-     ansible.builtin.user:   
+  - name: create expense user
+    ansible.builtin.user:
       name: expense
 
-   - name: createing app directory
-     ansible.builtin.file:
+  - name: create app directory
+    ansible.builtin.file:
       path: /app
-      state: directory   
+      state: directory
 
-   - name: dowanload the backend code
-     ansible.builtin.get_url:
+  - name: download backend code
+    ansible.builtin.get_url:
       url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
       dest: /tmp/backend.zip
 
-   - name: unzip the file
-     ansible.builtin.unarchive:
-      src: /tmp/backend.zip
+  - name: unzip backend code
+    ansible.builtin.unarchive:
+      src: /tmp/backend.zip # by default checks in ansible server
       dest: /app
       remote_src: yes
 
-   - name: install dependencies 
-     ansible.builtin.command: npm install
-     args:
+  - name: install npm dependencies
+    ansible.builtin.command: npm install
+    args:
       chdir: /app
 
-   - name: copy backend service
-     ansible.builtin.copy:
-      src: /backend.service
+  - name: copy backend service
+    ansible.builtin.copy:
+      src: backend.service
       dest: /etc/systemd/system/backend.service
-      remote_src: yes
 
-   - name: install mysql and python dependencies
-     ansible.builtin.pip:
-     name:
+  - name: install python mysql dependencies
+    ansible.builtin.pip: 
+      name:
       - PyMySQL # to connect MySQL DB from Ansible
       - cryptography
       executable: pip3.9 # pip3.11 if python version is 3.11
 
-        
-   - name: import data
-     community.mysql.mysql_db:
+  - name: import data into mysql
+    community.mysql.mysql_db:
       login_user: root
-      login_password: "{{ login_user_name }}"
-      login_name: "{{ login_host }}"
+      login_password: "{{ login_password }}"
+      login_host: "{{ login_host }}"
       target: /app/schema/backend.sql
       state: import
-      name: all 
+      name: all
 
-   - name: daemon reload
-     ansible.builtin.systemd_service:
+  - name: daemon reload
+    ansible.builtin.systemd_service:
       daemon_reload: true
 
-   - name: start and enable backend
-     ansible.builtin.service:
+  - name: start and enable backend service
+    ansible.builtin.service:
       name: backend
       state: started
-      enabled: yes   
-         
-
+      enabled: yes
